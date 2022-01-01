@@ -13,3 +13,8 @@ function loadData()
     }
 
 }
+
+function testFunction()
+{
+    alert("Cached data");
+}

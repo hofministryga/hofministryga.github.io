@@ -2,16 +2,14 @@
 function loadData()
 {
     var request = new XMLHttpRequest();
-    const url = "https://docs.google.com/uc?export=download&id=1l9LbESuW8qHf2cW2w7NHJZqtMdt6zohH";
+    const url = "https://api.github.com/repos/Davidah121/GLIB/contents/README.md?ref=master";
     request.open('GET', url, true);
+    request.setRequestHeader("Accept", "application/vnd.github.3.raw");
     request.send();
     request.responseType = 'text';
 
-    request.onreadystatechange = function() {
-        if(request.status === 200)
-        {
-            var pObj = document.getElementById(testID);
-            pObj.innerHTML = "Loaded";
-        }
+    request.onload = function(e) {
+        alert(request.response);
     }
+
 }

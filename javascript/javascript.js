@@ -16,5 +16,5 @@ function loadData()
 
 function testFunction()
 {
-    alert("Cached data");
+    alert("Non cached data");
 }

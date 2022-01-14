@@ -1,15 +1,19 @@
 html {
     scroll-behavior: smooth;
+    width: 100%;
+    height: 100%;
 }
 
 body {
     background-color:slategray;
     text-align: center;
     margin: 0px;
+    width: 100%;
+    height: 100%;
 }
 
 div.Header {
-    padding: 48px;
+    padding: 1%;
     text-align: center;
     background: #1abc9c;
     color: white;
@@ -23,7 +27,7 @@ div.NavListClass {
     transition: max-width 0.5s ease;
     background: #606060;
 
-    height: 100vh;
+    height: 100%;
 
     text-align: left;
 }
@@ -77,13 +81,11 @@ div.Main p{
 
 
 img.LogoImage {
-    width: 320px;
-    height: 320px;
+    max-width: 75%;
 }
 
 img.LogoImage2 {
-    width: 512px;
-    height: 320px;
+    max-width: 100%;
 }
 
 div.ContentDivider {
@@ -92,24 +94,26 @@ div.ContentDivider {
 
 .OptionContent {
     display: inline-block;
-    text-align: justify;
-    width: 40em;
+    text-align: center;
+    max-width: 40em;
     margin: 0 auto;
 }
 
 .OptionContent2 {
     font-size: 24pt;
     text-align: justify;
-    width: 20em;
+    width: 100%;
+    max-width: 20em;
     margin: 0 auto;
 }
 
 .OptionContent2 td{
-    padding: 1em;
+    padding: 5%;
 }
 
 .CashAppSVG {
-    width: 128px;
+    max-width: 128px;
+    width: 50%;
 }
 
 footer {

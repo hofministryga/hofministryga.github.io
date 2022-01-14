@@ -1,15 +1,19 @@
 html {
     scroll-behavior: smooth;
+    width: 100%;
+    height: 100%;
 }
 
 body {
     background-color:slategray;
     text-align: center;
     margin: 0px;
+    width: 100%;
+    height: 100%;
 }
 
 div.Header {
-    padding: 48px;
+    padding: 1%;
     text-align: center;
     background: #1abc9c;
     color: white;
@@ -62,13 +66,11 @@ div.Main p{
 }
 
 img.LogoImage {
-    width: 320px;
-    height: 320px;
+    max-width: 25%;
 }
 
 img.LogoImage2 {
-    width: 512px;
-    height: 320px;
+    max-width: 25%;
 }
 
 div.ContentDivider {

@@ -18,3 +18,33 @@ function testFunction()
 {
     alert("Non cached data");
 }
+
+function toggleNavBar()
+{
+    var docObj = document.getElementById("navList");
+
+    if(docObj.style.maxWidth === "132px")
+    {
+        docObj.style.maxWidth = "0px";
+    }
+    else
+    {
+        docObj.style.maxWidth = "132px";
+    }
+}
+
+window.addEventListener("resize", function() {
+    if(this.innerWidth > this.innerHeight)
+    {
+        //landscape
+        var docObj = document.getElementById("navList");
+        docObj.style.maxWidth = "none";
+    }
+    else
+    {
+        //portrait
+        var docObj = document.getElementById("navList");
+        docObj.style.maxWidth = "0px";
+    }
+
+}, false);

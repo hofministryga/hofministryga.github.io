@@ -1,0 +1,122 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color:slategray;
+    text-align: center;
+    margin: 0px;
+}
+
+div.Header {
+    padding: 48px;
+    text-align: center;
+    background: #1abc9c;
+    color: white;
+    font-size: 32pt;
+}
+
+div.NavListClass {
+    overflow: hidden;
+    display: inline-block;
+    max-width: 0px;
+    transition: max-width 0.5s ease;
+    background: #606060;
+
+    height: 100vh;
+
+    text-align: left;
+}
+
+
+div.NavListClass a:hover{
+    background: gray;
+}
+
+div.NavListClass a{
+    width: 132px;
+}
+
+.MobileTopNavBar {
+    overflow: hidden;
+    display: inline-block;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+}
+
+.MobileTopNavBar a{
+    color: white;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 24px;
+    display: inline-block;
+}
+
+.MobileTopNavBar a.Icon{
+    margin-top: 16px;
+    background: gray;
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    align-content: left;
+}
+
+.MobileTopNavBar a.Icon:hover{
+    background: green;
+}
+
+h1.TitleText {
+    text-align: center;
+    font-size: 48pt;
+}
+
+div.Main p{
+    font-size: 24pt;
+}
+
+
+img.LogoImage {
+    width: 320px;
+    height: 320px;
+}
+
+img.LogoImage2 {
+    width: 512px;
+    height: 320px;
+}
+
+div.ContentDivider {
+    padding: 64px;
+}
+
+.OptionContent {
+    display: inline-block;
+    text-align: justify;
+    width: 40em;
+    margin: 0 auto;
+}
+
+.OptionContent2 {
+    font-size: 24pt;
+    text-align: justify;
+    width: 20em;
+    margin: 0 auto;
+}
+
+.OptionContent2 td{
+    padding: 1em;
+}
+
+.CashAppSVG {
+    width: 128px;
+}
+
+footer {
+    left: 0;
+    bottom: 0;
+    font-size: 24pt;
+    color: white;
+    background: #606060;
+    padding: 1px;
+}

@@ -1,3 +1,4 @@
+
 html {
     scroll-behavior: smooth;
     width: 100%;
@@ -14,6 +15,8 @@ body {
 
 div.Content {
     display: inline-block;
+    width: 100%;
+    height: 100%;
 }
 
 p {
@@ -27,9 +30,10 @@ h1 {
 }
 
 div.Header {
-    padding: 1%;
+    padding-top: 1%;
     text-align: center;
-    background: #1abc9c;
+    /* background: #1abc9c; */
+    background-image: url("../images/x-xtgONQzGgOe-unsplash.jpg");
     color: white;
     font-size: 32pt;
     width: 100%;
@@ -37,14 +41,13 @@ div.Header {
 
 div.NavListClass {
     overflow: hidden;
-    display: inline-block;
-    max-width: 0px;
-    transition: max-width 0.5s ease;
+    display: block;
+    max-height: 0px;
+    transition: max-height 0.5s ease;
+
     background: #606060;
-
-    height: 100%;
-
-    text-align: left;
+    width: 100%;
+    text-align: center;
 }
 
 
@@ -58,27 +61,25 @@ div.NavListClass a{
 
 .MobileTopNavBar {
     overflow: hidden;
-    display: inline-block;
-    position: fixed;
-    left: 0px;
-    top: 0px;
+    display: block;
+    text-align: center;
+    /* position: fixed; */
+    /* left: 0px;
+    top: 0px; */
 }
 
 .MobileTopNavBar a{
     color: white;
     padding: 14px 16px;
     text-decoration: none;
+    text-align: center;
     font-size: 24px;
-    display: inline-block;
+    display: block;
 }
 
 .MobileTopNavBar a.Icon{
-    margin-top: 1%;
     background: gray;
-    display: inline-block;
-    position: relative;
-    vertical-align: top;
-    align-content: left;
+    display: block;
 }
 
 .MobileTopNavBar a.Icon:hover{
@@ -94,8 +95,13 @@ div.Main p{
     font-size: 24pt;
 }
 
-
 img.LogoImage {
+    max-width: 400px;
+    width: 75%;
+    height: 75%;
+}
+
+td.TableLogoImage {
     max-width: 400px;
     width: 75%;
     height: 75%;
@@ -130,6 +136,15 @@ div.ContentDivider {
     padding: 5%;
 }
 
+.OptionContent3 {
+    font-size: 32pt;
+    margin: 0 auto;
+    text-align: center;
+    font-style: oblique;
+    font-weight: 500;
+    font-family: serif;
+}
+
 .CashAppSVG {
     max-width: 128px;
     max-height: 128px;
@@ -143,6 +158,7 @@ footer {
     font-size: 24pt;
     color: white;
     background: #606060;
-    padding: 1%;
+    padding-top: 1%;
+    padding-bottom: 1%;
     width: 100%;
 }

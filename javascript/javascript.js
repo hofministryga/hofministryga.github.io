@@ -23,13 +23,13 @@ function toggleNavBar()
 {
     var docObj = document.getElementById("navList");
 
-    if(docObj.style.maxWidth === "132px")
+    if(docObj.style.maxHeight === "196px")
     {
-        docObj.style.maxWidth = "0px";
+        docObj.style.maxHeight = "0px";
     }
     else
     {
-        docObj.style.maxWidth = "132px";
+        docObj.style.maxHeight = "196px";
     }
 }
 
@@ -38,13 +38,13 @@ window.addEventListener("resize", function() {
     {
         //landscape
         var docObj = document.getElementById("navList");
-        docObj.style.maxWidth = "none";
+        docObj.style.maxHeight = "none";
     }
     else
     {
         //portrait
         var docObj = document.getElementById("navList");
-        docObj.style.maxWidth = "0px";
+        docObj.style.maxHeight = "0px";
     }
 
 }, false);

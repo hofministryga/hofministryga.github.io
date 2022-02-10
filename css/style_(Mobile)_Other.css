@@ -1,0 +1,168 @@
+
+html {
+    scroll-behavior: smooth;
+    min-height: 100%;
+}
+
+body {
+    background-color:slategray;
+    text-align: center;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    
+    background: linear-gradient(135deg, rgb(93, 185, 239) 25%, rgb(255, 255, 255) 120%); 
+    background-repeat: no-repeat;
+}
+
+div.Content {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+p {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+h1 {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+div.Header {
+    padding-top: 1%;
+    text-align: center;
+    /* background: #1abc9c; */
+    background-image: url("../images/x-xtgONQzGgOE-unsplash.jpg");
+    color: white;
+    font-size: 28pt;
+    width: 100%;
+}
+
+div.Header h1{
+    max-width: 100%;
+}
+
+div.NavListClass {
+    overflow: hidden;
+    display: block;
+    max-height: 0px;
+    transition: max-height 0.5s ease;
+
+    background: #4e4e4e;
+    width: 100%;
+    text-align: center;
+}
+
+
+div.NavListClass a:hover{
+    background: gray;
+}
+
+div.NavListClass a{
+    text-align: center;
+}
+
+.MobileTopNavBar {
+    overflow: hidden;
+    display: block;
+}
+
+.MobileTopNavBar a{
+    color: white;
+    padding: 14px 16px;
+    text-decoration: none;
+    text-align: left;
+    font-size: 24px;
+    display: block;
+}
+
+.MobileTopNavBar a.Icon{
+    background: #606060;
+    display: block;
+    text-align: center;
+}
+
+.MobileTopNavBar a.Icon:hover{
+    background: green;
+}
+
+h1.TitleText {
+    text-align: center;
+    font-size: 48pt;
+}
+
+div.Main p{
+    font-size: 24pt;
+}
+
+img.LogoImage {
+    max-width: 400px;
+    width: 75%;
+    height: 75%;
+}
+
+img.LogoImage2 {
+    max-width: 400px;
+    width: 100%;
+    height: 100%;
+}
+
+div.ContentDivider {
+    padding: 64px;
+}
+
+.OptionContent {
+    display: inline-block;
+    text-align: center;
+    max-width: 40em;
+    margin: 0 auto;
+}
+
+.OptionContent2 {
+    font-size: 24pt;
+    text-align: left;
+    width: 100%;
+    max-width: 20em;
+    margin: 0 auto;
+}
+
+.OptionContent2 td{
+    padding: 5%;
+}
+
+.OptionContent3 {
+    padding: 2%;
+    font-size: 24pt;
+    margin: 0 auto;
+    text-align: left;
+    font-style: oblique;
+    font-weight: 500;
+    font-family: serif;
+}
+
+td.TableLogoImage img{
+    max-width: 100%;
+    width: 100%;
+    height: 100%
+}
+
+.CashAppSVG {
+    max-width: 128px;
+    max-height: 128px;
+    width: 100%;
+    height: 100%;
+}
+
+footer {
+    left: 0;
+    bottom: 0;
+    font-size: 24pt;
+    color: white;
+    background: #4e4e4e;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    width: 100%;
+}

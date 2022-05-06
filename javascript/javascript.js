@@ -33,6 +33,20 @@ function toggleNavBar()
     }
 }
 
+function toggleSearchOptions()
+{
+    var docObj = document.getElementById("SearchOptions");
+
+    if(docObj.style.maxHeight === "320px")
+    {
+        docObj.style.maxHeight = "0px";
+    }
+    else
+    {
+        docObj.style.maxHeight = "320px";
+    }
+}
+
 window.addEventListener("resize", function() {
     if(this.innerWidth > this.innerHeight)
     {

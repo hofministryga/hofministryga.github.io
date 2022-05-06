@@ -123,15 +123,19 @@ div.ContentDivider {
 }
 
 .OptionContent3 {
-    font-size: 32pt;
+    font-size: 24pt;
     margin: 0 auto;
-    text-align: center;
+    text-align: left;
+    padding-left: 1%;
     font-style: oblique;
     font-weight: 500;
     font-family: serif;
 }
 
-td.TableLogoImage img{
+p.TableLogoImage {
+    text-align: center;
+}
+p.TableLogoImage img{
     max-width: 800px;
     max-height: 75%;
     width: 100%;

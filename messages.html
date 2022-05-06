@@ -27,6 +27,7 @@
 
     <body>
         <div class="Content">
+
             <!-- Title Header (Should be above the Navigation Bar)-->
             <div class="Header">
                 <h1>Household of Faith Ministry</h1>
@@ -45,17 +46,75 @@
                         <i class="fa fa-bars"></i>
                     </a>
             </nav>
+            
 
             <div class="Main">
-                <h1 class="TitleText">Under Construction</h1>
+                <h1 class="TitleText">Message Search</h1>
 
-                <!-- <table id="MessageContainer">
-                    <tr>
-                        <th>TITLE</th>
-                        <th>DATE</th>
-                        <th>DOWNLOAD</th>
-                    </tr>
-                </table> -->
+                <div>
+
+                    <button class="fa fa-bars" style="text-align: left; font-size: 36px;" onclick="toggleSearchOptions()"></button>
+                    <label for="TitleName">Title:</label>
+                    
+                    <form class="SearchWrapper">
+                        <input type="text" name="search" placeholder="Search..." id="TitleName">
+                        <input type="reset" value="x" alt="clear">
+                    </form>
+                    <button class="fa fa-search" style="font-size: 36px;" onclick="search()"></button>
+
+                    <br>
+                    <div id="SearchOptions" class="SearchOptionsClass">
+
+                        <table class="InnerSOC">
+                            <thead>
+                                <tr>
+                                    <td><h1>Day</h1></td>
+                                    <td><h1>Order</h1></td>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td>
+                                    <!-- SORT DAY STUFF -->
+                                    <div class="SearchOptionDayClass">
+                                        <input type="radio" id="allDayBut" name="SortDay" value="ALLDAY" checked>
+                                        <label for="allDayBut">Any</label>
+                                        <br>
+                                        <input type="radio" id="sundayBut" name="SortDay" value="SUNDAY">
+                                        <label for="sundayBut">Sunday</label>
+                                        <br>
+                                        <input type="radio" id="wednesdayBut" name="SortDay" value="WEDNESDAY">
+                                        <label for="wednesdayBut">Wednesday</label>
+                                        <br>
+                                        <input type="radio" id="thursdayBut" name="SortDay" value="THURSDAY">
+                                        <label for="thursdayBut">Thursday</label>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <!-- SORT STYLE -->
+                                    <div class="SearchOptionSortClass">
+                                        <input type="radio" id="sort1" name="SortStyle" value="Ascending" checked>
+                                        <label for="sort1">Newest</label>
+                                        <br>
+                                        <input type="radio" id="sort2" name="SortStyle" value="Descending">
+                                        <label for="sort2">Oldest</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <br>
+                    <hr>
+                    <br>
+
+                    <div id="MessageContainer" class="MessageDivClass">
+                    </div>
+                    <br>
+                </div>
+
+                
             </div>
 
             <footer>

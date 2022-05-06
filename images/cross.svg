@@ -1,0 +1,6 @@
+<svg width="180" height="220" xmlns="http://www.w3.org/2000/svg">
+    <path d="M75 10 h40 l-5,10 v40 h40 l5,-5 v40 l-5,-5 h-40 v100 l15,20 h-70 l15,-20 v-100 h-40 l-5,5 v-40 l5,5 h40 v-40 l-5,-10z"
+    fill="black"
+    stroke="white"
+    stroke-width="8"/>
+</svg>

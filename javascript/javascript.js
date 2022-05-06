@@ -19,17 +19,39 @@ function testFunction()
     alert("Non cached data");
 }
 
+function clearSearchBox()
+{
+    var docObj = document.getElementById("TitleName");
+    docObj.value = "";
+}
+
+function showHideClearbutton()
+{
+    var docObj1 = document.getElementById("TitleName");
+    var clearButObj = document.getElementById("clear");
+
+    if(!docObj1.value || docObj1.value.length === 0)
+    {
+        //empty string. hide clearButton
+        clearButObj.style.visibility = "Hidden";
+    }
+    else
+    {
+        clearButObj.style.visibility = "Visible";
+    }
+}
+
 function toggleNavBar()
 {
     var docObj = document.getElementById("navList");
 
-    if(docObj.style.maxHeight === "196px")
+    if(docObj.style.maxWidth === "196px")
     {
-        docObj.style.maxHeight = "0px";
+        docObj.style.maxWidth = "0px";
     }
     else
     {
-        docObj.style.maxHeight = "196px";
+        docObj.style.maxWidth = "196px";
     }
 }
 
@@ -52,13 +74,13 @@ window.addEventListener("resize", function() {
     {
         //landscape
         var docObj = document.getElementById("navList");
-        docObj.style.maxHeight = "none";
+        docObj.style.maxWidth = "none";
     }
     else
     {
         //portrait
         var docObj = document.getElementById("navList");
-        docObj.style.maxHeight = "0px";
+        docObj.style.maxWidth = "0px";
     }
 
 }, false);

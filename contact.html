@@ -26,24 +26,26 @@
 
     <body>
         <div class="Content">
-            
-            <!-- Title Header (Should be above the Navigation Bar)-->
-            <div class="Header">
-                <h1>Household of Faith Ministry</h1>
-                <img class="LogoImage" src="images/HOFLogo.png" alt="Household of Faith Ministry Logo" title="Household of Faith Ministry Logo"/>
-            </div>
-            
             <!-- Navigation Bar -->
             <nav class="MobileTopNavBar">
-                    <div class="NavListClass" id="navList">
-                        <a href="index.html">Home</a>
-                        <a href="messages.html">Messages</a>
-                        <a href="contact.html">Contact</a>
-                    </div>
-
-                    <a href="javascript:void(0);" class="Icon" onclick="toggleNavBar()">
-                        <i class="fa fa-bars"></i>
+                <div class="DivNavLogoImage">
+                    <a href="index.html">
+                        <img class="NavLogoImage" src="images/HOFLogo.png" alt="Household of Faith Ministry Logo" title="Household of Faith Ministry Logo"/>
                     </a>
+                    <!-- <h1>Household of Faith Ministry</h1> -->
+                    <div class="NavListParent">
+                        <a href="javascript:void(0);" class="Icon" onclick="toggleNavBar()">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                        <div class="NavListClass" id="navList">
+                            <a href="index.html">Home</a>
+                            <a href="messages.html">Messages</a>
+                            <a href="contact.html">Contact</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="TableLogoImage"><img src="images/HOFLogo3_Cropped.png" alt="Household of Faith Ministry Logo" title="Household of Faith Ministry Logo"/></p>
             </nav>
 
             <!-- Where the church name will appear and mission statement -->

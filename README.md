@@ -1,2 +1,2 @@
 # hofministryga.github.io
-Base Website for the House Hold of Faith.
+Database work around. Only contains the database file used to search messages.

@@ -8,24 +8,43 @@ sql-wasm.wasm and sql-wasm.js obtained from https://github.com/sql-js/sql.js/
 config = {
     locateFile: filename => '/dist/sql-wasm.wasm'
 }
+
 var db;
+var page;
 
 initSqlJs(config).then(function(SQL){
     //Create the database
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/dbStuff/TestDatabase.db', true);
-    xhr.responseType = 'arraybuffer';
 
+    //Format assuming main: https://api.github.com/repos/{REPO OWNER}/{REPO NAME}/contents/{PATH}
+    //Format using any branch: https://api.github.com/repos/{REPO OWNER}/{REPO NAME}/contents/{PATH}?ref={BRANCH}
+    
+    xhr.open('GET', 'https://api.github.com/repos/hofministryga/hofministryga.github.io/contents/CMM.db?ref=db', true);
+    xhr.responseType = 'text';
+    
     xhr.onload = e => {
-        const uInt8 = new Uint8Array(xhr.response);
+        //Parse to JSON then parse content from base64 to uint8 array. Have to do in a weird way cause javascript sucks.
+        var jsonVar = JSON.parse(xhr.responseText);
+        const uInt8 = new Uint8Array(base64ToUint8Array(jsonVar.content));
         db = new SQL.Database(uInt8);
         initPage();
     }
-
+    
     xhr.send();
 });
 
 //End of Sample Code
+
+function base64ToUint8Array(base64String)
+{
+    var binString = window.atob(base64String);
+    var bytes = new Uint8Array(base64String.length);
+    for(var i=0; i<base64String.length; i++)
+    {
+        bytes[i] = binString.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
 
 function replaceLineBreaks(string) {
     var nString = "";
@@ -144,22 +163,34 @@ function getID(idValue) {
         //DateText
         titleData2 = document.createElement("td");
         date = document.createElement("h2");
-        date.innerHTML = reformatDate(row[4]);
+        date.innerHTML = reformatDate(row[5]);
         titleData2.appendChild(date);
         titleRow.appendChild(titleData2);
 
 
         //MessageText
         messageP = document.createElement("p");
-        messageP.innerHTML = replaceLineBreaks(row[3]);
+        messageP.innerHTML = replaceLineBreaks(row[4]);
 
         mainDiv.appendChild(messageP);
 
-        //DownloadLink
-        downloadLink = document.createElement("a");
-        downloadLink.setAttribute("href", row[2]);
-        downloadLink.innerHTML = "Link";
-        mainDiv.appendChild(downloadLink);
+        if(row[2].length != 0)
+        {
+            //Video Link
+            downloadLink1 = document.createElement("a");
+            downloadLink1.setAttribute("href", row[2]); //row[2] = video link, row[3] = audio link
+            downloadLink1.innerHTML = "Video Link";
+            mainDiv.appendChild(downloadLink1);
+        }
+
+        if(row[3].length != 0)
+        {
+            //Audio Link
+            downloadLink2 = document.createElement("a");
+            downloadLink2.setAttribute("href", row[3]); //row[2] = video link, row[3] = audio link
+            downloadLink2.innerHTML = "Audio Link";
+            mainDiv.appendChild(downloadLink2);
+        }
 
         messageContainer = document.getElementById("MessageContainer");
         messageContainer.appendChild(mainDiv);
@@ -170,6 +201,10 @@ function getID(idValue) {
 
 function getAllMessages() {
     // Prepare a statement
+    // const countStmt = db.prepare("SELECT COUNT(*) FROM MESSAGES");
+    // countStmt.step();
+    // var count = Number(countStmt.get()[0]);
+
     const stmt = db.prepare("SELECT * FROM MESSAGES");
     var isValid = false;
     
@@ -200,22 +235,34 @@ function getAllMessages() {
         //DateText
         titleData2 = document.createElement("td");
         date = document.createElement("h2");
-        date.innerHTML = reformatDate(row[4]);
+        date.innerHTML = reformatDate(row[5]);
         titleData2.appendChild(date);
         titleRow.appendChild(titleData2);
 
 
         //MessageText
         messageP = document.createElement("p");
-        messageP.innerHTML = replaceLineBreaks(row[3]);
+        messageP.innerHTML = replaceLineBreaks(row[4]);
 
         mainDiv.appendChild(messageP);
 
-        //DownloadLink
-        downloadLink = document.createElement("a");
-        downloadLink.setAttribute("href", row[2]);
-        downloadLink.innerHTML = "Link";
-        mainDiv.appendChild(downloadLink);
+        if(row[2].length != 0)
+        {
+            //Video Link
+            downloadLink1 = document.createElement("a");
+            downloadLink1.setAttribute("href", row[2]); //row[2] = video link, row[3] = audio link
+            downloadLink1.innerHTML = "Video Link";
+            mainDiv.appendChild(downloadLink1);
+        }
+
+        if(row[3].length != 0)
+        {
+            //Audio Link
+            downloadLink2 = document.createElement("a");
+            downloadLink2.setAttribute("href", row[3]); //row[2] = video link, row[3] = audio link
+            downloadLink2.innerHTML = "Audio Link";
+            mainDiv.appendChild(downloadLink2);
+        }
 
         messageContainer = document.getElementById("MessageContainer");
         messageContainer.appendChild(mainDiv);
@@ -226,6 +273,7 @@ function getAllMessages() {
 
 function getMessagesOptions(title, day, orderBy) {
     // Prepare a statement
+
     var statementString = "SELECT * FROM MESSAGES AS M ";
     if(day != -1)
         statementString += "WHERE strftime('%w', M.DateRecorded) == " + day + " ";
@@ -233,13 +281,12 @@ function getMessagesOptions(title, day, orderBy) {
     if(title != null && title != "") {
         statementString += "WHERE M.Title LIKE '%" + title + "%' ";
     }
-    
-    if(title != "")
 
     if(orderBy === true)
         statementString += "ORDER BY M.DateRecorded ASC";
     else
         statementString += "ORDER BY M.DateRecorded DESC";
+    
 
     const stmt = db.prepare(statementString);
     var isValid = false;
@@ -271,22 +318,34 @@ function getMessagesOptions(title, day, orderBy) {
         //DateText
         titleData2 = document.createElement("td");
         date = document.createElement("h2");
-        date.innerHTML = reformatDate(row[4]);
+        date.innerHTML = reformatDate(row[5]);
         titleData2.appendChild(date);
         titleRow.appendChild(titleData2);
 
 
         //MessageText
         messageP = document.createElement("p");
-        messageP.innerHTML = replaceLineBreaks(row[3]);
+        messageP.innerHTML = replaceLineBreaks(row[4]);
 
         mainDiv.appendChild(messageP);
 
-        //DownloadLink
-        downloadLink = document.createElement("a");
-        downloadLink.setAttribute("href", row[2]);
-        downloadLink.innerHTML = "Link";
-        mainDiv.appendChild(downloadLink);
+        if(row[2].length != 0)
+        {
+            //Video Link
+            downloadLink1 = document.createElement("a");
+            downloadLink1.setAttribute("href", row[2]); //row[2] = video link, row[3] = audio link
+            downloadLink1.innerHTML = "Video Link";
+            mainDiv.appendChild(downloadLink1);
+        }
+
+        if(row[3].length != 0)
+        {
+            //Audio Link
+            downloadLink2 = document.createElement("a");
+            downloadLink2.setAttribute("href", row[3]); //row[2] = video link, row[3] = audio link
+            downloadLink2.innerHTML = "Audio Link";
+            mainDiv.appendChild(downloadLink2);
+        }
 
         messageContainer = document.getElementById("MessageContainer");
         messageContainer.appendChild(mainDiv);

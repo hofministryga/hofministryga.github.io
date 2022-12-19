@@ -1,2 +1,2 @@
 # hofministryga.github.io
-Base Website for the House Hold of Faith.
+Base Website for the HouseHold of Faith Ministry.

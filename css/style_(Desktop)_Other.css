@@ -335,3 +335,25 @@ div.MessageDivClass a {
     padding-left: 5%;
     text-shadow: none;
 }
+
+.videoClass {
+    margin-left: 5%;
+}
+
+.PageNumClass {
+    text-align: center;
+    display: inline-flex;
+}
+
+.PageNumClass p {
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.PageNumClass button {
+    width: 32px;
+    height: 32px;
+    vertical-align: bottom;
+    margin: 2%;
+    margin-top: 25%;
+}

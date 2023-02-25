@@ -10,7 +10,11 @@ config = {
 }
 
 var db;
-var page;
+var page = 0;
+var pageCount = 1;
+var itemsPerPage = 6;
+var lastCommand = "NULL";
+var lastFunctionCall = null;
 
 initSqlJs(config).then(function(SQL){
     //Create the database
@@ -66,6 +70,31 @@ function reformatDate(string) {
     nString = splitString[2] + "/" + splitString[1] + "/" + splitString[0];
     return nString;
 }
+
+//Obtained from https://gist.github.com/rodrigoborgesdeoliveira/987683cfbfcc8d800192da1e73adc486
+//Youtube has way to many url formats
+function getYouTubeVideoIdByUrl(url) {
+    const reg = /^(https?:)?(\/\/)?((www\.|m\.)?youtube(-nocookie)?\.com\/((watch)?\?(feature=\w*&)?vi?=|embed\/|vi?\/|e\/)|youtu.be\/)([\w\-]{10,20})/i
+    const match = url.match(reg);
+    if (match) {
+        return match[9];
+    } else {
+        return null;
+    }
+}
+
+function getVideoAsEmbed(string) {
+    let vidId = getYouTubeVideoIdByUrl(string);
+    
+    if(vidId != null)
+    {
+        return "https://youtube.com/embed/"+vidId;
+    }
+
+    return ""; //Not a youtube link
+}
+
+//Also, will need this later https://kb.blackbaud.com/knowledgebase/Article/121327
 
 function initPage() {
     cleanUp();
@@ -133,8 +162,115 @@ function displayError() {
     messageContainer.appendChild(mainDiv);
 }
 
+function getCount(str) {
+    const stmt = db.prepare(str);
+    if(stmt.step())
+    {
+        const row = stmt.get();
+        return row[0];
+    }
+
+    return null;
+}
+
+function fixPageAndCount(itemCount, commandType)
+{
+    if(itemCount == null)
+        return false;
+    
+    pageCount = Math.ceil(itemCount/itemsPerPage);
+    var pageNumText = document.getElementById("PageNumID");
+    page = parseInt(pageNumText.innerHTML);
+    
+    if(commandType != lastCommand)
+    {
+        pageNumText.innerHTML = "1";
+        page = 0;
+    }
+    else
+    {
+        if(page > pageCount)
+        {
+            pageNumText.innerHTML = pageCount;
+            page = pageCount;
+        }
+    }
+    lastCommand = commandType;
+
+    return true;
+}
+
+function pageBack()
+{
+    var pageNumText = document.getElementById("PageNumID");
+    page = parseInt(pageNumText.innerHTML);
+
+    if(page-1 >= 0)
+        page -= 1;
+    
+    pageNumText.innerHTML = page+1;
+
+    if(lastFunctionCall != null)
+        lastFunctionCall();
+}
+function pageBackJump()
+{
+    var pageNumText = document.getElementById("PageNumID");
+    page = parseInt(pageNumText.innerHTML);
+
+    if(page-5 >= 0)
+        page -= 5;
+    else
+        page = 0;
+    
+    pageNumText.innerHTML = page+1;
+
+    if(lastFunctionCall != null)
+        lastFunctionCall();
+}
+function pageFoward()
+{
+    var pageNumText = document.getElementById("PageNumID");
+    page = parseInt(pageNumText.innerHTML);
+
+    if(page+1 < pageCount)
+        page += 1;
+    
+    pageNumText.innerHTML = page+1;
+    
+    if(lastFunctionCall != null)
+        lastFunctionCall();
+}
+function pageForwardJump()
+{
+    var pageNumText = document.getElementById("PageNumID");
+    page = parseInt(pageNumText.innerHTML);
+
+    if(page+5 < pageCount)
+        page += 5;
+    else
+        page = pageCount;
+    
+    pageNumText.innerHTML = page+1;
+    
+    if(lastFunctionCall != null)
+        lastFunctionCall();
+}
+
 function getID(idValue) {
-    const stmt = db.prepare("SELECT * FROM MESSAGES WHERE MessageID = " + idValue);
+
+    var commandStr = "SELECT COUNT(*) FROM MESSAGES WHERE MessageID = " + idValue;
+    var tmpCount = getCount(commandStr);
+    
+    commandStr = "SELECT * FROM MESSAGES WHERE MessageID = " + idValue;
+    fixPageAndCount(tmpCount, "GetID");
+    commandStr += " LIMIT " + itemsPerPage + " OFFSET " + (itemsPerPage*page);
+
+    lastFunctionCall = function() {
+        getID(idValue);
+    };
+
+    const stmt = db.prepare(commandStr);
     var isValid = false;
     while(stmt.step()) { //
         const row = stmt.get();
@@ -176,20 +312,28 @@ function getID(idValue) {
 
         if(row[2].length != 0)
         {
-            //Video Link
-            downloadLink1 = document.createElement("a");
-            downloadLink1.setAttribute("href", row[2]); //row[2] = video link, row[3] = audio link
-            downloadLink1.innerHTML = "Video Link";
-            mainDiv.appendChild(downloadLink1);
+            //Video as youtube iframe
+            videoIFrame = document.createElement("iframe");
+            videoIFrame.setAttribute("width", "320");
+            videoIFrame.setAttribute("height", "240");
+            videoIFrame.setAttribute("src", getVideoAsEmbed(row[2]));
+            videoIFrame.setAttribute("class", "videoClass");
+
+            mainDiv.appendChild(videoIFrame);
+            
         }
 
         if(row[3].length != 0)
         {
-            //Audio Link
-            downloadLink2 = document.createElement("a");
-            downloadLink2.setAttribute("href", row[3]); //row[2] = video link, row[3] = audio link
-            downloadLink2.innerHTML = "Audio Link";
-            mainDiv.appendChild(downloadLink2);
+            //Audio Controls
+            //Not tested
+            audioIFrame = document.createElement("iframe");
+            audioIFrame.setAttribute("width", "320");
+            audioIFrame.setAttribute("height", "240");
+            audioIFrame.setAttribute("src", row[3]);
+            audioIFrame.setAttribute("class", "videoClass");
+
+            mainDiv.appendChild(audioIFrame);
         }
 
         messageContainer = document.getElementById("MessageContainer");
@@ -205,7 +349,19 @@ function getAllMessages() {
     // countStmt.step();
     // var count = Number(countStmt.get()[0]);
 
-    const stmt = db.prepare("SELECT * FROM MESSAGES");
+    var commandStr = "SELECT COUNT(*) FROM MESSAGES";
+    var tmpCount = getCount(commandStr);
+    
+    commandStr = "SELECT * FROM MESSAGES";
+    fixPageAndCount(tmpCount, "GetAllMessages");
+    commandStr += " LIMIT " + itemsPerPage + " OFFSET " + (itemsPerPage*page);
+
+    
+    lastFunctionCall = function() {
+        getAllMessages();
+    };
+
+    const stmt = db.prepare(commandStr);
     var isValid = false;
     
     while(stmt.step()) { //
@@ -248,20 +404,28 @@ function getAllMessages() {
 
         if(row[2].length != 0)
         {
-            //Video Link
-            downloadLink1 = document.createElement("a");
-            downloadLink1.setAttribute("href", row[2]); //row[2] = video link, row[3] = audio link
-            downloadLink1.innerHTML = "Video Link";
-            mainDiv.appendChild(downloadLink1);
+            //Video as youtube iframe
+            videoIFrame = document.createElement("iframe");
+            videoIFrame.setAttribute("width", "320");
+            videoIFrame.setAttribute("height", "240");
+            videoIFrame.setAttribute("src", getVideoAsEmbed(row[2]));
+            videoIFrame.setAttribute("class", "videoClass");
+
+            mainDiv.appendChild(videoIFrame);
+            
         }
 
         if(row[3].length != 0)
         {
-            //Audio Link
-            downloadLink2 = document.createElement("a");
-            downloadLink2.setAttribute("href", row[3]); //row[2] = video link, row[3] = audio link
-            downloadLink2.innerHTML = "Audio Link";
-            mainDiv.appendChild(downloadLink2);
+            //Audio Controls
+            //Not tested
+            audioIFrame = document.createElement("iframe");
+            audioIFrame.setAttribute("width", "320");
+            audioIFrame.setAttribute("height", "240");
+            audioIFrame.setAttribute("src", row[3]);
+            audioIFrame.setAttribute("class", "videoClass");
+
+            mainDiv.appendChild(audioIFrame);
         }
 
         messageContainer = document.getElementById("MessageContainer");
@@ -275,11 +439,17 @@ function getMessagesOptions(title, day, orderBy) {
     // Prepare a statement
 
     var statementString = "SELECT * FROM MESSAGES AS M ";
+    var commandStr = "SELECT COUNT(*) FROM MESSAGES AS M ";
     if(day != -1)
+    {
         statementString += "WHERE strftime('%w', M.DateRecorded) == " + day + " ";
+        commandStr += "WHERE strftime('%w', M.DateRecorded) == " + day + " ";
+    }
     
-    if(title != null && title != "") {
+    if(title != null && title != "")
+    {
         statementString += "WHERE M.Title LIKE '%" + title + "%' ";
+        commandStr += "WHERE M.Title LIKE '%" + title + "%' ";
     }
 
     if(orderBy === true)
@@ -287,6 +457,15 @@ function getMessagesOptions(title, day, orderBy) {
     else
         statementString += "ORDER BY M.DateRecorded DESC";
     
+    var tmpCount = getCount(commandStr);
+    fixPageAndCount(tmpCount, "GetMessagesOptions");
+
+    
+    statementString += " LIMIT " + itemsPerPage + " OFFSET " + (itemsPerPage*page);
+    
+    lastFunctionCall = function() {
+        getMessagesOptions(title, day, orderBy);
+    };
 
     const stmt = db.prepare(statementString);
     var isValid = false;
@@ -331,20 +510,28 @@ function getMessagesOptions(title, day, orderBy) {
 
         if(row[2].length != 0)
         {
-            //Video Link
-            downloadLink1 = document.createElement("a");
-            downloadLink1.setAttribute("href", row[2]); //row[2] = video link, row[3] = audio link
-            downloadLink1.innerHTML = "Video Link";
-            mainDiv.appendChild(downloadLink1);
+            //Video as youtube iframe
+            videoIFrame = document.createElement("iframe");
+            videoIFrame.setAttribute("width", "320");
+            videoIFrame.setAttribute("height", "240");
+            videoIFrame.setAttribute("src", getVideoAsEmbed(row[2]));
+            videoIFrame.setAttribute("class", "videoClass");
+
+            mainDiv.appendChild(videoIFrame);
+            
         }
 
         if(row[3].length != 0)
         {
-            //Audio Link
-            downloadLink2 = document.createElement("a");
-            downloadLink2.setAttribute("href", row[3]); //row[2] = video link, row[3] = audio link
-            downloadLink2.innerHTML = "Audio Link";
-            mainDiv.appendChild(downloadLink2);
+            //Audio Controls
+            //Not tested
+            audioIFrame = document.createElement("iframe");
+            audioIFrame.setAttribute("width", "320");
+            audioIFrame.setAttribute("height", "240");
+            audioIFrame.setAttribute("src", row[3]);
+            audioIFrame.setAttribute("class", "videoClass");
+
+            mainDiv.appendChild(audioIFrame);
         }
 
         messageContainer = document.getElementById("MessageContainer");

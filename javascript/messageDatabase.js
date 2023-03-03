@@ -65,9 +65,9 @@ function replaceLineBreaks(string) {
 function reformatDate(string) {
     var nString = "";
     //date in format yyyy-mm-dd
-    //change to format dd/mm/yyyy
+    //change to format mm/dd/yyyy
     var splitString = string.split('-');
-    nString = splitString[2] + "/" + splitString[1] + "/" + splitString[0];
+    nString = splitString[1] + "/" + splitString[2] + "/" + splitString[0];
     return nString;
 }
 

@@ -215,6 +215,10 @@ div.SearchOptionSortClass {
     width: 100%;
 }
 
+div.SearchOptionSortTypeClass {
+    width: 100%;
+}
+
 label {
     font-size: 24pt;
 }

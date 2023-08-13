@@ -77,6 +77,7 @@
                             <thead>
                                 <tr>
                                     <td><h1>Day</h1></td>
+                                    <td><h1>Sort By</h1></td>
                                     <td><h1>Order</h1></td>
                                 </tr>
                             </thead>
@@ -84,27 +85,38 @@
                                 <td>
                                     <!-- SORT DAY STUFF -->
                                     <div class="SearchOptionDayClass">
-                                        <input type="radio" id="allDayBut" name="SortDay" value="ALLDAY" checked>
+                                        <input type="radio" id="allDayBut" name="SortDay" value="ALLDAY" checked="checked" autocomplete="off">
                                         <label for="allDayBut">Any</label>
                                         <br>
-                                        <input type="radio" id="sundayBut" name="SortDay" value="SUNDAY">
+                                        <input type="radio" id="sundayBut" name="SortDay" value="SUNDAY" autocomplete="off">
                                         <label for="sundayBut">Sunday</label>
                                         <br>
-                                        <input type="radio" id="wednesdayBut" name="SortDay" value="WEDNESDAY">
+                                        <input type="radio" id="wednesdayBut" name="SortDay" value="WEDNESDAY" autocomplete="off">
                                         <label for="wednesdayBut">Wednesday</label>
                                         <br>
-                                        <input type="radio" id="thursdayBut" name="SortDay" value="THURSDAY">
+                                        <input type="radio" id="thursdayBut" name="SortDay" value="THURSDAY" autocomplete="off">
                                         <label for="thursdayBut">Thursday</label>
+                                    </div>
+                                </td>
+                                
+                                <td>
+                                    <!-- SORT TYPE STYLE -->
+                                    <div class="SearchOptionSortTypeClass">
+                                        <input type="radio" id="sortType1" name="SortTypeStyle" value="Date Recorded" autocomplete="off">
+                                        <label for="sortType1">Date Recorded</label>
+                                        <br>
+                                        <input type="radio" id="sortType2" name="SortTypeStyle" value="Date Uploaded" checked="checked" autocomplete="off">
+                                        <label for="sortType2">Date Uploaded</label>
                                     </div>
                                 </td>
 
                                 <td>
                                     <!-- SORT STYLE -->
                                     <div class="SearchOptionSortClass">
-                                        <input type="radio" id="sort1" name="SortStyle" value="Ascending" checked>
+                                        <input type="radio" id="sort1" name="SortStyle" value="Ascending" checked="checked" autocomplete="off">
                                         <label for="sort1">Newest</label>
                                         <br>
-                                        <input type="radio" id="sort2" name="SortStyle" value="Descending">
+                                        <input type="radio" id="sort2" name="SortStyle" value="Descending" autocomplete="off">
                                         <label for="sort2">Oldest</label>
                                     </div>
                                 </td>

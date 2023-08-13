@@ -16,6 +16,12 @@ var itemsPerPage = 6;
 var lastCommand = "NULL";
 var lastFunctionCall = null;
 
+var lastSearchTitle = "";
+var lastSearchDay = -1;
+var lastSearchSort = true;
+var lastSearchSortType = true;
+var lastSearchID = -1;
+
 initSqlJs(config).then(function(SQL){
     //Create the database
     const xhr = new XMLHttpRequest();
@@ -97,14 +103,14 @@ function getVideoAsEmbed(string) {
 //Also, will need this later https://kb.blackbaud.com/knowledgebase/Article/121327
 
 function initPage() {
-    cleanUp();
 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('ID');
     var isValid = false;
     if(id === "" || id === null) {
-        isValid = getAllMessages();
+        // isValid = getAllMessages();
+        isValid = getMessagesOptions("", -1, true, true);
     }
     else {
         //attempt to find specific id
@@ -119,7 +125,6 @@ function initPage() {
 
 function search() {
     var isValid = false;
-    cleanUp();
 
     var dayNum = -1;
     var asc = false;
@@ -134,9 +139,10 @@ function search() {
         dayNum = 4;
     
     asc = document.getElementById("sort1").checked;
+    byUploadDate = document.getElementById("sortType2").checked;
     searchText = document.getElementById("TitleName").value;
 
-    isValid = getMessagesOptions(searchText, dayNum, asc);
+    isValid = getMessagesOptions(searchText, dayNum, asc, byUploadDate);
     if(!isValid) {
         displayError();
     }
@@ -180,7 +186,7 @@ function fixPageAndCount(itemCount, commandType)
     
     pageCount = Math.ceil(itemCount/itemsPerPage);
     var pageNumText = document.getElementById("PageNumID");
-    page = parseInt(pageNumText.innerHTML);
+    page = parseInt(pageNumText.innerHTML)-1;
     
     if(commandType != lastCommand)
     {
@@ -194,6 +200,12 @@ function fixPageAndCount(itemCount, commandType)
             pageNumText.innerHTML = pageCount;
             page = pageCount;
         }
+        if(page < 0)
+        {
+            //problem
+            pageNumText.innerHTML = "1";
+            page = 0;
+        }
     }
     lastCommand = commandType;
 
@@ -203,7 +215,7 @@ function fixPageAndCount(itemCount, commandType)
 function pageBack()
 {
     var pageNumText = document.getElementById("PageNumID");
-    page = parseInt(pageNumText.innerHTML);
+    page = parseInt(pageNumText.innerHTML) - 1;
 
     if(page-1 >= 0)
         page -= 1;
@@ -216,7 +228,7 @@ function pageBack()
 function pageBackJump()
 {
     var pageNumText = document.getElementById("PageNumID");
-    page = parseInt(pageNumText.innerHTML);
+    page = parseInt(pageNumText.innerHTML) - 1;
 
     if(page-5 >= 0)
         page -= 5;
@@ -231,34 +243,41 @@ function pageBackJump()
 function pageFoward()
 {
     var pageNumText = document.getElementById("PageNumID");
-    page = parseInt(pageNumText.innerHTML);
+    page = parseInt(pageNumText.innerHTML)-1;
 
     if(page+1 < pageCount)
+    {
         page += 1;
+        pageNumText.innerHTML = page+1;
+            
+        if(lastFunctionCall != null)
+            lastFunctionCall();
+    }
     
-    pageNumText.innerHTML = page+1;
-    
-    if(lastFunctionCall != null)
-        lastFunctionCall();
 }
 function pageForwardJump()
 {
     var pageNumText = document.getElementById("PageNumID");
-    page = parseInt(pageNumText.innerHTML);
+    page = parseInt(pageNumText.innerHTML)-1;
+    oldP = page;
 
     if(page+5 < pageCount)
         page += 5;
     else
-        page = pageCount;
+        page = pageCount-1;
     
-    pageNumText.innerHTML = page+1;
-    
-    if(lastFunctionCall != null)
-        lastFunctionCall();
+    if(oldP != page)
+    {
+        pageNumText.innerHTML = page+1;
+        
+        if(lastFunctionCall != null)
+            lastFunctionCall();
+    }
 }
 
 function getID(idValue) {
 
+    cleanUp();
     var commandStr = "SELECT COUNT(*) FROM MESSAGES WHERE MessageID = " + idValue;
     var tmpCount = getCount(commandStr);
     
@@ -266,8 +285,12 @@ function getID(idValue) {
     fixPageAndCount(tmpCount, "GetID");
     commandStr += " LIMIT " + itemsPerPage + " OFFSET " + (itemsPerPage*page);
 
+    lastSearchTitle = "";
+    lastSearchDay = -1;
+    lastSearchSort = true;
+    lastSearchID = idValue;
     lastFunctionCall = function() {
-        getID(idValue);
+        getID(lastSearchID);
     };
 
     const stmt = db.prepare(commandStr);
@@ -318,6 +341,7 @@ function getID(idValue) {
             videoIFrame.setAttribute("height", "240");
             videoIFrame.setAttribute("src", getVideoAsEmbed(row[2]));
             videoIFrame.setAttribute("class", "videoClass");
+            videoIFrame.setAttribute("allowfullscreen", "true");
 
             mainDiv.appendChild(videoIFrame);
             
@@ -343,119 +367,55 @@ function getID(idValue) {
     return isValid;
 }
 
-function getAllMessages() {
-    // Prepare a statement
-    // const countStmt = db.prepare("SELECT COUNT(*) FROM MESSAGES");
-    // countStmt.step();
-    // var count = Number(countStmt.get()[0]);
-
-    var commandStr = "SELECT COUNT(*) FROM MESSAGES";
-    var tmpCount = getCount(commandStr);
-    
-    commandStr = "SELECT * FROM MESSAGES";
-    fixPageAndCount(tmpCount, "GetAllMessages");
-    commandStr += " LIMIT " + itemsPerPage + " OFFSET " + (itemsPerPage*page);
-
-    
-    lastFunctionCall = function() {
-        getAllMessages();
-    };
-
-    const stmt = db.prepare(commandStr);
-    var isValid = false;
-    
+function test()
+{
+    var statement = "SELECT strftime('%w', DateRecorded) AS DR FROM MESSAGES WHERE DR IS '0'";
+    const stmt = db.prepare(statement);
     while(stmt.step()) { //
         const row = stmt.get();
-        isValid = true;
-
-        //Setup Div Stuff
-        mainDiv = document.createElement("div");
-        titleTable = document.createElement("table");
-        titleRow = document.createElement("tr");
-
-        mainDiv.appendChild(titleTable);
-        titleTable.appendChild(titleRow);
-        titleTable.setAttribute("class", "SubMessageTableClass");
-
-        //TitleText
-        titleData1 = document.createElement("td");
-        title = document.createElement("h1");
-        titleRef = document.createElement("a");
-        titleRef.innerHTML = replaceLineBreaks(row[1]);
-        titleRef.setAttribute("href", "messages.html?ID="+row[0]);
-
-        title.appendChild(titleRef);
-        titleData1.appendChild(title);
-        titleRow.appendChild(titleData1);
-
-        //DateText
-        titleData2 = document.createElement("td");
-        date = document.createElement("h2");
-        date.innerHTML = reformatDate(row[5]);
-        titleData2.appendChild(date);
-        titleRow.appendChild(titleData2);
-
-
-        //MessageText
-        messageP = document.createElement("p");
-        messageP.innerHTML = replaceLineBreaks(row[4]);
-
-        mainDiv.appendChild(messageP);
-
-        if(row[2].length != 0)
-        {
-            //Video as youtube iframe
-            videoIFrame = document.createElement("iframe");
-            videoIFrame.setAttribute("width", "320");
-            videoIFrame.setAttribute("height", "240");
-            videoIFrame.setAttribute("src", getVideoAsEmbed(row[2]));
-            videoIFrame.setAttribute("class", "videoClass");
-
-            mainDiv.appendChild(videoIFrame);
-            
-        }
-
-        if(row[3].length != 0)
-        {
-            //Audio Controls
-            //Not tested
-            audioIFrame = document.createElement("iframe");
-            audioIFrame.setAttribute("width", "320");
-            audioIFrame.setAttribute("height", "240");
-            audioIFrame.setAttribute("src", row[3]);
-            audioIFrame.setAttribute("class", "videoClass");
-
-            mainDiv.appendChild(audioIFrame);
-        }
-
-        messageContainer = document.getElementById("MessageContainer");
-        messageContainer.appendChild(mainDiv);
+        console.log(row);
     }
-
-    return isValid;
 }
 
-function getMessagesOptions(title, day, orderBy) {
+function getMessagesOptions(title, day, orderBy, sortType) {
     // Prepare a statement
 
-    var statementString = "SELECT * FROM MESSAGES AS M ";
-    var commandStr = "SELECT COUNT(*) FROM MESSAGES AS M ";
+    cleanUp();
+    test();
+
+    var statementString = "SELECT *, strftime('%w', DateRecorded) AS DR FROM MESSAGES ";
+    var commandStr = "SELECT COUNT(*), strftime('%w', DateRecorded) AS DR FROM MESSAGES ";
     if(day != -1)
     {
-        statementString += "WHERE strftime('%w', M.DateRecorded) == " + day + " ";
-        commandStr += "WHERE strftime('%w', M.DateRecorded) == " + day + " ";
+        statementString += "WHERE DR = '" + day + "' ";
+        commandStr += "WHERE DR = '" + day + "' ";
     }
     
     if(title != null && title != "")
     {
-        statementString += "WHERE M.Title LIKE '%" + title + "%' ";
-        commandStr += "WHERE M.Title LIKE '%" + title + "%' ";
+        if(day != -1)
+        {
+            statementString += "AND ";
+            commandStr += "AND ";
+        }
+        statementString += "WHERE Title LIKE '%" + title + "%' ";
+        commandStr += "WHERE Title LIKE '%" + title + "%' ";
     }
 
-    if(orderBy === true)
-        statementString += "ORDER BY M.DateRecorded ASC";
+    if(sortType === false)
+    {
+        if(orderBy === true)
+            statementString += "ORDER BY DateRecorded DESC";
+        else
+            statementString += "ORDER BY DateRecorded ASC";
+    }
     else
-        statementString += "ORDER BY M.DateRecorded DESC";
+    {
+        if(orderBy === true)
+            statementString += "ORDER BY MessageID DESC";
+        else
+            statementString += "ORDER BY MessageID ASC";
+    }
     
     var tmpCount = getCount(commandStr);
     fixPageAndCount(tmpCount, "GetMessagesOptions");
@@ -463,8 +423,14 @@ function getMessagesOptions(title, day, orderBy) {
     
     statementString += " LIMIT " + itemsPerPage + " OFFSET " + (itemsPerPage*page);
     
+    lastSearchTitle = title;
+    lastSearchDay = day;
+    lastSearchSort = orderBy;
+    lastSearchSortType = sortType;
+    lastSearchID = -1;
+
     lastFunctionCall = function() {
-        getMessagesOptions(title, day, orderBy);
+        getMessagesOptions(lastSearchTitle, lastSearchDay, lastSearchSort, lastSearchSortType);
     };
 
     const stmt = db.prepare(statementString);
@@ -516,6 +482,7 @@ function getMessagesOptions(title, day, orderBy) {
             videoIFrame.setAttribute("height", "240");
             videoIFrame.setAttribute("src", getVideoAsEmbed(row[2]));
             videoIFrame.setAttribute("class", "videoClass");
+            videoIFrame.setAttribute("allowfullscreen", "true");
 
             mainDiv.appendChild(videoIFrame);
             

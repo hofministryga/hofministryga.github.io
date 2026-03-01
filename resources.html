@@ -20,8 +20,9 @@
         <link rel="stylesheet" media="screen and (orientation: landscape)" href="css/style_(Desktop)_Other.css"/>
         <link rel="stylesheet" media="screen and (orientation: portrait)" href="css/style_(Mobile)_Other.css"/>
 
+		<script src="https://mozilla.github.io/pdf.js/build/pdf.mjs" type="module"></script>
         <script src="javascript/javascript.js"></script>
-
+        <script src="javascript/pdfDisplayer.js" type="module"></script>
     </head>
 
     <body>
@@ -51,51 +52,17 @@
 
             <!-- Where the church name will appear and mission statement -->
             <div class="Main">
-                <h1 class="TitleText">Contact Information</h1>
-                <p>Need to contact us?</p>
-                <p>Prayer request are accepted.</p>
-                <div class="OptionContent">
-                    <p>Email:
-                        <i class="material-icons">email</i>
-                        <a href="mailto:hofministryga@gmail.com">hofministryga@gmail.com</a></p>
-                    <p>Phone:
-                        <i class="fa fa-phone"></i>
-                        <a href="tel:+1912-347-4187">(912) 347-4187</a></p>
-                </div>
-    
-
-                
-                <h1 class="TitleText">Donations</h1>
-                <p>Want to donate or send Tithe?</p>
-                
-                    <table class="OptionContent2">
-                        <tr>
-                            <td>PayPal: </td>
-                            <td>
-                                <form action="https://www.paypal.com/donate" method="post" target="_top">
-                                <input type="hidden" name="business" value="FEZLMEG2DTHXS" />
-                                <input type="hidden" name="no_recurring" value="1" />
-                                <input type="hidden" name="currency_code" value="USD" />
-                            
-                                <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-                                <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>CashApp: </td>
-                            <td>
-                                <a href="https://cash.app/$Hofministryga">
-                                    <img class="CashAppSVG" src="svg/Cash App - Dollar - Icon.svg" alt="CashApp" title="CashApp"/>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Mailing Address: </td>
-                            <td>PO Box 99<br>Screven, GA 31560</td>
-                        </tr>
-                    </table>
-
+                <h1 class="TitleText">Downloadable Resources</h1>
+				
+				<div>
+					<div style="display:inline-block;">
+						<a href="resources/Bible Study Conference Line 08052021.pdf">
+							<canvas id="pdf-preview"></canvas>
+						</a>
+						<p>Promises</p>
+					</div>
+				</div>
+				
             </div>
             
             <footer>
